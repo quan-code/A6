@@ -44,4 +44,58 @@ public class SQLiteData extends SQLiteOpenHelper {
         Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         return result;
     }
+
+    public Cursor getFilteredData(String priceFromString, String priceToString, String dateFrom, String dateTo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor result = null;
+        Double priceFrom = null;
+        Double priceTo = null;
+        if (!priceFromString.isEmpty()) {
+            priceFrom = Double.parseDouble(priceFromString);
+        }
+        if (!priceToString.isEmpty()) {
+            priceTo = Double.parseDouble(priceToString);
+        }
+
+        // if price from
+        if (priceFrom != null && priceTo == null && dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom, null);
+        } else if (priceFrom == null && priceTo != null && dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price <= " + priceTo, null);
+        } else if (priceFrom == null && priceTo == null && !dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Date >= '" + dateFrom + "'", null);
+        } else if (priceFrom == null && priceTo == null && dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Date <= '" + dateTo + "'", null);
+        } else if (priceFrom != null && priceTo != null && dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Price <= " + priceTo, null);
+        } else if (priceFrom == null && priceTo == null && !dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Date >= '" + dateFrom + "' AND Date <= '" + dateTo + "'", null);
+        } else if (priceFrom != null && priceTo == null && !dateFrom.isEmpty() && dateTo.isEmpty()){
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Date >= '" + dateFrom + "'", null);
+        } else if (priceFrom != null && priceTo == null && dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Date <= '" + dateTo + "'", null);
+        } else if (priceFrom == null && priceTo != null && !dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price <= " + priceTo + " AND Date >= '" + dateFrom + "'", null);
+        } else if (priceFrom == null && priceTo != null && dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price <= " + priceTo + " AND Date <= '" + dateTo + "'", null);
+        } else if (priceFrom != null && priceTo != null && !dateFrom.isEmpty() && dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Price <= " +
+                    priceTo + " AND Date >= '" + dateFrom + "'", null);
+        } else if (priceFrom != null && priceTo != null && dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Price <= " +
+                    priceTo + " AND Date <= '" + dateTo + "'", null);
+        } else if (priceFrom == null && priceTo != null && !dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price <= " + priceTo + " AND Date >= '" +
+                    dateFrom + "' AND Date <= '" + dateTo + "'", null);
+        } else if (priceFrom != null && priceTo == null && !dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Date >= '" +
+                    dateFrom + "' AND Date <= '" + dateTo +"'", null);
+        } else if (priceFrom != null && priceTo != null && !dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE Price >= " + priceFrom + " AND Price <= " + priceTo + " AND Date >= '" +
+                    dateFrom + "' AND Date <= '" + dateTo + "'", null);
+        } else {
+            result = getAllData();
+        }
+        return result;
+    }
 }

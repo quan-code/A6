@@ -21,8 +21,13 @@ public class MainActivity extends AppCompatActivity {
     EditText editDate;
     EditText editPrice;
     EditText editItem;
+    EditText filterDateFrom;
+    EditText filterDateTo;
+    EditText filterPriceFrom;
+    EditText filterPriceTo;
     Button btnAdd;
     Button btnSub;
+    Button btnFilter;
     TableLayout history;
     DecimalFormat df = new DecimalFormat("0.00");
 
@@ -36,11 +41,17 @@ public class MainActivity extends AppCompatActivity {
         editDate = (EditText) findViewById(R.id.editDate);
         editPrice = (EditText) findViewById(R.id.editPrice);
         editItem = (EditText) findViewById(R.id.editItem);
+        filterDateFrom = (EditText) findViewById(R.id.dateFrom);
+        filterDateTo = (EditText) findViewById(R.id.dateTo);
+        filterPriceFrom = (EditText) findViewById(R.id.priceFrom);
+        filterPriceTo = (EditText) findViewById(R.id.priceTo);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnSub = (Button) findViewById(R.id.btnSub);
+        btnFilter = (Button) findViewById(R.id.btnFilter);
         history = (TableLayout) findViewById(R.id.tableHistory);
         AddTransaction();
-        GetHistory();
+        GetHistory(myDb.getAllData());
+        Filter();
     }
 
     public void AddTransaction(){
@@ -58,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Transaction Created", Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(MainActivity.this, "Transaction Not Created", Toast.LENGTH_LONG).show();
-                        GetHistory();
+                        GetHistory(myDb.getAllData());
                         ClearText();
                     }
                 }
@@ -78,16 +89,15 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Transaction Created", Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(MainActivity.this, "Transaction Not Created", Toast.LENGTH_LONG).show();
-                        GetHistory();
+                        GetHistory(myDb.getAllData());
                         ClearText();
                     }
                 }
         );
     }
 
-    public void GetHistory(){
+    public void GetHistory(Cursor result){
         ClearTable();
-        Cursor result = myDb.getAllData();
         StringBuffer buffer = new StringBuffer();
         Double balance = 0.0;
         while(result.moveToNext()){
@@ -119,10 +129,30 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.balance.setText("Current Balance: $" + df.format(balance));
     }
 
+    public void Filter() {
+        btnFilter.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String priceFrom = filterPriceFrom.getText().toString();
+                        String priceTo = filterPriceTo.getText().toString();
+                        String dateFrom = filterDateFrom.getText().toString();
+                        String dateTo = filterDateTo.getText().toString();
+                        Cursor result = myDb.getFilteredData(priceFrom, priceTo, dateFrom, dateTo);
+                        GetHistory(result);
+                    }
+                }
+        );
+    }
+
     public void ClearText(){
         MainActivity.this.editDate.setText("");
         MainActivity.this.editPrice.setText("");
         MainActivity.this.editItem.setText("");
+        MainActivity.this.filterPriceFrom.setText("");
+        MainActivity.this.filterPriceTo.setText("");
+        MainActivity.this.filterDateFrom.setText("");
+        MainActivity.this.filterDateTo.setText("");
     }
 
     public void ClearTable(){

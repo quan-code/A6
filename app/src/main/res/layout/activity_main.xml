@@ -18,6 +18,64 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Date from: " />
+        <EditText
+            android:id="@+id/dateFrom"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Date to: " />
+        <EditText
+            android:id="@+id/dateTo"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Price from: " />
+        <EditText
+            android:id="@+id/priceFrom"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine" />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Price to: " />
+        <EditText
+            android:id="@+id/priceTo"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine" />
+        <Button
+            android:id="@+id/btnFilter"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Filter" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <EditText
             android:id="@+id/editDate"
             android:layout_width="100dp"
